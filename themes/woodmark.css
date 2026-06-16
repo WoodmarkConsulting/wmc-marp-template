@@ -1,0 +1,536 @@
+/* @theme woodmark */
+
+/*
+ * Woodmark — Marp theme matching the corporate PowerPoint template.
+ *
+ * Brand palette and fonts extracted from docs/template.pptx (theme1.xml,
+ * slideMaster1.xml, slideLayouts):
+ *   - Primary green   #009B3E   (accent1)
+ *   - Title green     #009A32   (title / divider backgrounds)
+ *   - Dark green ink  #204232   (dk2 — headings & body text)
+ *   - Light tint      #E7F3E8   (accent2 — panels, zebra rows, code)
+ *   - Teal            #009A9D   (accent3 — links)
+ *   - Mid green       #2D5C47   (accent4)
+ *   - Orange          #E46C0A   (accent5 — callouts)
+ *   - Red             #93140A   (accent6 — warnings)
+ *   - Headings font   Roboto Slab
+ *   - Body font       Source Sans Pro
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+@import 'default';
+
+:root {
+    /* Brand colors */
+    --wm-green: #009b3e;
+    --wm-green-title: #009a32;
+    --wm-ink: #204232;
+    --wm-tint: #e7f3e8;
+    --wm-teal: #009a9d;
+    --wm-mid: #2d5c47;
+    --wm-orange: #e46c0a;
+    --wm-red: #93140a;
+    --wm-white: #fffeff;
+
+    /* Fonts */
+    --wm-font-head: 'Roboto Slab', 'Times New Roman', serif;
+    --wm-font-body: 'Source Sans 3', 'Source Sans Pro', 'Segoe UI', sans-serif;
+    --wm-font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+
+    /* Marpit theme hooks */
+    --color-background: var(--wm-white);
+    --color-foreground: var(--wm-ink);
+    --color-highlight: var(--wm-green);
+    --color-dimmed: #6b7c73;
+}
+
+/* ---------- Base slide (plain "Titel + Inhalt" layout) ---------- */
+section {
+    font-family: var(--wm-font-body);
+    font-size: 26px;
+    line-height: 1.5;
+    color: var(--wm-ink);
+    background-color: var(--wm-white);
+    padding: 64px 88px 74px 64px;
+    align-content: start;
+}
+
+/* "Passion for data" brand marker — top-right corner of every slide.
+   Self-contained inline SVG: green square + the white Woodmark Consulting
+   logo (the three-wave mark, official path geometry) + wordmark. */
+section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 106px;
+    height: 108px;
+    z-index: 6;
+    background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20114%20112'%3E%3Cpolygon%20points='10%2C0%20114%2C0%20114%2C112%2028%2C112'%20fill='%23009b3e'/%3E%3Cg%20fill='%23ffffff'%20transform='translate%2845.8%2C4%29%20scale%280.92%29'%3E%3Cpath%20d='M22.3089041%2C13.6657534%20C17.2195205%2C15.3071918%2012.5184932%2C17.7328767%208.70445205%2C20.6859589%20C4.56232877%2C23.8921233%201.68184932%2C27.5921233%200.374315068%2C31.3863014%20C0.289383562%2C31.6349315%200.00582191781%2C32.8705479%200%2C33.2684932%20C0.71609589%2C33.6708904%203.78732877%2C34.6756849%206.05753425%2C35.4191781%20C7.35821918%2C35.8452055%208.26061644%2C36.1414384%208.79760274%2C36.3359589%20C8.50410959%2C32.0140411%209.90958904%2C27.7428082%2012.8797945%2C23.9465753%20C15.6839041%2C20.3636986%2019.8034247%2C17.2787671%2024.8260274%2C14.994863%20C24.039726%2C14.5958904%2022.8523973%2C13.9722603%2022.3089041%2C13.6657534'/%3E%3Cpath%20d='M30.3455479%2C15.185274%20C26.5260274%2C16.555137%2023.3972603%2C18.7222603%2020.7167808%2C20.7205479%20C17.590411%2C23.0517123%2015.3359589%2C25.7407534%2014.0157534%2C28.7136986%20C13.110274%2C30.7541096%2012.6695205%2C32.8821918%2012.7058219%2C35.0407534%20C12.740411%2C37.1044521%2013.2085616%2C39.1424658%2014.0969178%2C41.1%20C14.814726%2C41.605137%2022.3630137%2C44.5787671%2024.8503425%2C45.1849315%20C22.7061644%2C42.3037671%2021.2869863%2C39.4328767%2020.6297945%2C36.6428082%20C19.9955479%2C33.9520548%2020.0619863%2C31.314726%2020.8273973%2C28.8054795%20C21.7934932%2C25.6376712%2023.9089041%2C22.6410959%2026.9479452%2C20.1407534%20C28.6017123%2C18.7791096%2030.5229452%2C17.6633562%2032.8239726%2C16.9554795%20C32.1328767%2C16.6599315%2031.0143836%2C15.535274%2030.3455479%2C15.185274'/%3E%3Cpath%20d='M32.1065068%2C21.290411%20C32.0311644%2C21.290411%2031.7376712%2C21.4109589%2031.1219178%2C21.8126712%20C29.9756849%2C22.614726%2028.3469178%2C23.9178082%2027.4938356%2C24.8910959%20C26.0068493%2C26.5863014%2025.0041096%2C28.4989726%2024.5136986%2C30.5763699%20C23.4828767%2C34.9417808%2024.7777397%2C39.714726%2028.1589041%2C44.014726%20C29.9315068%2C46.2691781%2031.4318493%2C47.8558219%2033.3273973%2C49.4773973%20C33.9486301%2C49.594863%2037.5493151%2C49.7667808%2040.1859589%2C49.8931507%20C41.1311644%2C49.9383562%2041.8479452%2C49.9726027%2042.3804795%2C50%20C39.4828767%2C47.9835616%2037.0328767%2C45.925%2035.555137%2C44.2561644%20C33.6020548%2C42.0493151%2032.1482877%2C39.7208904%2031.2332192%2C37.3349315%20C30.2910959%2C34.8743151%2029.9715753%2C32.4760274%2030.2832192%2C30.2061644%20C30.6506849%2C27.5287671%2031.9592466%2C24.9565068%2034.0208904%2C22.9527397%20C34.0044521%2C22.9527397%2032.5702055%2C21.3876712%2032.1157534%2C21.2910959%20C32.1130137%2C21.2907534%2032.110274%2C21.290411%2032.1065068%2C21.290411'/%3E%3C/g%3E%3Ctext%20x='69'%20y='80'%20fill='%23ffffff'%20font-family=%22Roboto%20Slab%2CGeorgia%2Cserif%22%20font-size='14.5'%20text-anchor='middle'%3EPassion%3C/text%3E%3Ctext%20x='69'%20y='98'%20fill='%23ffffff'%20font-family=%22Roboto%20Slab%2CGeorgia%2Cserif%22%20font-size='14.5'%20text-anchor='middle'%3Efor%20data%3C/text%3E%3C/svg%3E") center / cover no-repeat;
+}
+
+/* ---------- Headings ---------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--wm-font-head);
+    color: var(--wm-ink);
+    font-weight: 400;
+    line-height: 1.15;
+    margin: 0 0 0.9em;
+}
+
+h1 {
+    font-size: 44px;
+    color: var(--wm-green);
+}
+
+h2 {
+    font-size: 34px;
+    color: var(--wm-green);
+}
+
+h3 {
+    font-size: 27px;
+    color: var(--wm-mid);
+}
+
+h4 {
+    font-size: 24px;
+    color: var(--wm-mid);
+}
+
+/* ---------- Body text ---------- */
+p,
+li {
+    color: var(--wm-ink);
+}
+
+strong {
+    color: var(--wm-green);
+    font-weight: 700;
+}
+
+em {
+    color: var(--wm-mid);
+}
+
+a,
+a:visited {
+    color: var(--wm-teal);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+}
+
+ul>li::marker {
+    color: var(--wm-green);
+}
+
+ol>li::marker {
+    color: var(--wm-green);
+    font-weight: 700;
+}
+
+/* ---------- Code ---------- */
+code {
+    font-family: var(--wm-font-mono);
+    font-size: 0.85em;
+    background-color: var(--wm-tint);
+    color: var(--wm-ink);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+}
+
+pre {
+    font-family: var(--wm-font-mono);
+    font-size: 21px;
+    line-height: 1.4;
+    background-color: var(--wm-tint);
+    border-left: 4px solid var(--wm-green);
+    border-radius: 6px;
+    padding: 0.9em 1.1em;
+}
+
+pre code {
+    background: transparent;
+    padding: 0;
+    color: var(--wm-ink);
+}
+
+/* ---------- Tables ---------- */
+table {
+    border-collapse: collapse;
+    font-size: 22px;
+    width: 100%;
+}
+
+th {
+    background-color: var(--wm-green);
+    color: var(--wm-white);
+    font-family: var(--wm-font-head);
+    font-weight: 600;
+    text-align: left;
+    padding: 0.5em 0.7em;
+}
+
+td {
+    padding: 0.45em 0.7em;
+    border-bottom: 1px solid #cfe2d4;
+}
+
+tbody tr:nth-child(even) {
+    background-color: var(--wm-tint);
+}
+
+/* ---------- Blockquotes / callouts ---------- */
+blockquote {
+    border-left: 5px solid var(--wm-orange);
+    background-color: var(--wm-tint);
+    color: var(--wm-ink);
+    margin: 0.6em 0;
+    padding: 0.5em 1em;
+    font-style: normal;
+}
+
+blockquote::before,
+blockquote::after {
+    content: none;
+}
+
+/* ---------- Eyebrow label (rendered from the `header` directive) ---------- */
+header {
+    position: absolute;
+    top: 25px;
+    left: 64px;
+    margin: 0;
+    padding: 0;
+    font-family: var(--wm-font-body);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--wm-mid);
+    z-index: 4;
+}
+
+/* ---------- Footer band (dark green, full width) ---------- */
+footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 44px;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0 88px 0 64px;
+    display: flex;
+    align-items: center;
+    background-color: var(--wm-ink);
+    color: var(--wm-white);
+    font-family: var(--wm-font-body);
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    z-index: 4;
+}
+
+footer .foot-date {
+    margin-right: 40px;
+}
+
+/* page number — sits on the footer band, right-aligned */
+section::after {
+    bottom: 0;
+    right: 36px;
+    height: 44px;
+    line-height: 44px;
+    padding: 0;
+    color: var(--wm-white);
+    font-family: var(--wm-font-body);
+    font-size: 14px;
+    z-index: 5;
+}
+
+/* ====================================================================
+   LAYOUT VARIANTS  — set per slide via  <!-- _class: NAME -->
+     (default)          plain "Titel + Inhalt"
+     banner              title on a sloped light-green header band
+     sidebar            title in a left light-green panel, content on right
+     statement          centered Big Statement
+     lead               title / closing slide (centered)
+     columns            body text flows in two columns (combine with banner)
+   ==================================================================== */
+
+/* ---------- Columns: two-column body ----------
+   Use with:  <!-- _class: columns -->  (or  columns banner  for a banded title).
+   The heading spans the full width; body content flows into two columns.
+   Insert a manual break with  <div class="col-break"></div>  if needed. */
+section.columns {
+    column-count: 2;
+    column-gap: 56px;
+    column-fill: balance;
+}
+
+section.columns h1,
+section.columns h2,
+section.columns h3 {
+    column-span: all;
+}
+
+/* keep list items from splitting across the column boundary */
+section.columns li,
+section.columns pre,
+section.columns table,
+section.columns blockquote {
+    break-inside: avoid;
+}
+
+.col-break {
+    break-after: column;
+}
+
+/* ---------- banner-subtitle: sloped light-green header band with subtitle ---------- */
+section.banner-subtitle {
+    padding-top: 284px;
+    background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201280%20720'%20preserveAspectRatio='none'%3E%3Cpolygon%20points='0%2C0%201280%2C0%201280%2C150%200%2C230'%20fill='%23e7f3e8'/%3E%3Cpolygon%20points='0%2C239%201280%2C159%201280%2C167%200%2C247'%20fill='%23009b3e'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat var(--wm-white);
+}
+
+section.banner-subtitle h1,
+section.banner-subtitle h2 {
+    position: absolute;
+    top: 64px;
+    left: 64px;
+    right: 230px;
+    margin: 0;
+    padding: 0;
+    border-bottom: none;
+    color: var(--wm-green);
+}
+
+section.banner-subtitle h3 {
+    position: absolute;
+    top: 130px;
+    left: 64px;
+    right: 230px;
+    max-width: 576px;
+    margin: 0;
+    padding: 0;
+    border-bottom: none;
+    color: var(--wm-ink);
+}
+
+/* ---------- banner: title only, sloped light-green header band ---------- */
+section.banner {
+    padding-top: 218px;
+    background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201280%20720'%20preserveAspectRatio='none'%3E%3Cpolygon%20points='0%2C0%201280%2C0%201280%2C70%200%2C175'%20fill='%23e7f3e8'/%3E%3Cpolygon%20points='0%2C184%201280%2C79%201280%2C87%200%2C192'%20fill='%23009b3e'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat var(--wm-white);
+}
+
+section.banner h1,
+section.banner h2 {
+    position: absolute;
+    top: 68px;
+    left: 64px;
+    right: 230px;
+    max-width: 580px;
+    margin: 0;
+    padding: 0;
+    border-bottom: none;
+    color: var(--wm-green);
+}
+
+/* ---------- Sidebar: title panel on the left ---------- */
+section.sidebar {
+    padding: 110px 88px 74px 468px;
+    background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201280%20720'%20preserveAspectRatio='none'%3E%3Cpolygon%20points='0%2C0%20360%2C0%20432%2C720%200%2C720'%20fill='%23e7f3e8'/%3E%3Cpolygon%20points='369%2C0%20377%2C0%20449%2C720%20441%2C720'%20fill='%23009b3e'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat var(--wm-white);
+}
+
+section.sidebar header {
+    max-width: 260px;
+}
+
+section.sidebar h1,
+section.sidebar h2 {
+    position: absolute;
+    top: 96px;
+    left: 64px;
+    width: 300px;
+    margin: 0;
+    padding: 0;
+    border-bottom: none;
+    font-size: 40px;
+    color: var(--wm-green);
+}
+
+/* ---------- Steps: left title panel + circle markers riding the line ---------- */
+section.steps {
+    padding: 110px 96px 96px 468px;
+    background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201280%20720'%20preserveAspectRatio='none'%3E%3Cpolygon%20points='386%2C0%201280%2C0%201280%2C720%20458%2C720'%20fill='%23e7f3e8'/%3E%3Cpolygon%20points='369%2C0%20377%2C0%20449%2C720%20441%2C720'%20fill='%23009b3e'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat var(--wm-white);
+}
+
+section.steps header {
+    max-width: 260px;
+}
+
+section.steps h1,
+section.steps h2 {
+    position: absolute;
+    top: 96px;
+    left: 64px;
+    width: 300px;
+    margin: 0;
+    padding: 0;
+    border-bottom: none;
+    font-size: 40px;
+    color: var(--wm-green);
+}
+
+section.steps ul,
+section.steps ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+section.steps li {
+    position: relative;
+    margin: 1em 0;
+    padding-left: 0;
+    font-size: 28px;
+    line-height: 1.3;
+    color: var(--wm-ink);
+}
+
+section.steps li::before {
+    content: "";
+    position: absolute;
+    left: -124px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: none;
+    background: radial-gradient(circle,
+            var(--wm-green) 0 44%,
+            var(--wm-white) 44% 51%,
+            var(--wm-green) 51% 100%);
+    box-shadow: 3px 4px 6px rgba(0, 0, 0, 0.28);
+}
+
+/* follow the tilted line: each row sits a little further right */
+section.steps li:nth-child(1)::before {
+    left: -103px;
+}
+
+section.steps li:nth-child(2)::before {
+    left: -97px;
+}
+
+section.steps li:nth-child(3)::before {
+    left: -90px;
+}
+
+section.steps li:nth-child(4)::before {
+    left: -84px;
+}
+
+section.steps li:nth-child(5)::before {
+    left: -77px;
+}
+
+section.steps li:nth-child(6)::before {
+    left: -71px;
+}
+
+section.steps li:nth-child(7)::before {
+    left: -65px;
+}
+
+section.steps li:nth-child(8)::before {
+    left: -58px;
+}
+
+section.steps li::marker {
+    content: none;
+}
+
+/* ---------- Statement & Lead: centered big title ---------- */
+section.statement,
+section.lead {
+    align-content: center;
+    text-align: center;
+    padding: 96px 120px 74px;
+    background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201280%20720'%20preserveAspectRatio='none'%3E%3Cpolygon%20points='167%2C0%201280%2C0%201280%2C720%20231%2C720'%20fill='%23e7f3e8'/%3E%3Cpolygon%20points='150%2C0%20158%2C0%20222%2C720%20214%2C720'%20fill='%23009b3e'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat var(--wm-white);
+}
+
+section.statement header,
+section.lead header {
+    display: none;
+}
+
+section.statement h1,
+section.lead h1 {
+    font-family: var(--wm-font-head);
+    font-weight: 400;
+    color: var(--wm-ink);
+    border-bottom: none;
+    margin: 0 0 0.3em;
+}
+
+section.statement h1 {
+    font-size: 72px;
+}
+
+section.lead h1 {
+    font-size: 60px;
+}
+
+section.lead h2,
+section.lead h3,
+section.statement h2,
+section.statement h3 {
+    color: var(--wm-green);
+    border-bottom: none;
+    font-weight: 400;
+}
+
+section.lead p,
+section.lead li,
+section.statement p,
+section.statement li {
+    color: var(--wm-ink);
+}
+
+section.lead strong,
+section.statement strong {
+    color: var(--wm-green);
+}
+
+section.lead a,
+section.lead a:visited,
+section.statement a,
+section.statement a:visited {
+    color: var(--wm-teal);
+}
+
+/* ---------- Helper classes ---------- */
+.small {
+    font-size: 0.8em;
+}
+
+.muted {
+    color: var(--wm-mid);
+}
+
+.note {
+    color: var(--wm-orange);
+    font-weight: 600;
+}
+
+.warn {
+    color: var(--wm-red);
+    font-weight: 600;
+}
