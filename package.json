@@ -1,0 +1,22 @@
+{
+  "name": "wmc-marp-template",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Woodmark Consulting corporate Marp slide template with a branded theme and build-time Mermaid diagram rendering.",
+  "scripts": {
+    "build": "marp --config marp.config.mjs",
+    "build:pdf": "marp --config marp.config.mjs --pdf",
+    "build:png": "marp --config marp.config.mjs --images png",
+    "build:rendered": "mkdir -p decks/rendered && for d in starter layout-test; do for ext in pdf html; do marp --config marp.config.mjs decks/$d.md -o decks/rendered/$d.$ext; done; done",
+    "server": "marp --config marp.config.mjs --server decks/",
+    "watch": "marp --config marp.config.mjs --watch decks/"
+  },
+  "devDependencies": {
+    "@marp-team/marp-cli": "^4.4.0",
+    "@marp-team/marp-core": "^4.3.0",
+    "@mermaid-js/mermaid-cli": "^11.15.0",
+    "jsdom": "^29.1.1",
+    "puppeteer": "^24.0.0"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  // Register the Woodmark theme for the Marp for VS Code extension so the live
+  // preview matches the exported deck. See:
+  // https://marketplace.visualstudio.com/items?itemName=marp-team.marp-vscode
+  "markdown.marp.themes": [
+    "./themes/woodmark.css"
+  ]
+  // Optional: if Marp cannot find a Chromium browser for PDF/PPTX/PNG export,
+  // point it at one explicitly (this is also read by the Mermaid renderer via
+  // the CHROME_PATH environment variable when running the CLI):
+  // "markdown.marp.browserPath": "/path/to/chrome"
+}
