@@ -27,6 +27,19 @@ footer: '<span class="foot-date">01.01.2026</span>My Presentation · Internal ·
 
 ---
 
+<!-- _class: steps -->
+
+## How to get started
+
+- Clone the template and install dependencies
+- Copy `starter.md` and set your title & footer
+- Write slides in Markdown with a layout per section
+- Add diagrams as ` ```mermaid ` code fences
+- Preview live with the Marp VS Code extension
+- Export on-brand PDF / PPTX via `npm run build`
+
+---
+
 ## A standard content slide
 
 Plain slides use a white background with a green title.

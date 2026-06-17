@@ -8,6 +8,7 @@
     "build": "marp --config marp.config.mjs",
     "build:pdf": "marp --config marp.config.mjs --pdf",
     "build:png": "marp --config marp.config.mjs --images png",
+    "build:screenshots": "mkdir -p assets && marp --config marp.config.mjs decks/starter.md --images png -o decks/rendered/starter.png && cp decks/rendered/starter.001.png assets/cover.png && cp decks/rendered/starter.002.png assets/banner.png && cp decks/rendered/starter.003.png assets/steps.png && cp decks/rendered/starter.004.png assets/default-content.png && cp decks/rendered/starter.005.png assets/mermaid.png && cp decks/rendered/starter.006.png assets/statement.png",
     "build:rendered": "mkdir -p decks/rendered && for d in starter layout-test; do for ext in pdf html; do marp --config marp.config.mjs decks/$d.md -o decks/rendered/$d.$ext; done; done",
     "server": "marp --config marp.config.mjs --server decks/",
     "watch": "marp --config marp.config.mjs --watch decks/"

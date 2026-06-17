@@ -122,6 +122,20 @@ modifiers and can be combined:
 See [`decks/layout-test.md`](decks/layout-test.md) for a slide of every layout
 and content type.
 
+### Layout examples
+
+| Layout | Screenshot |
+|--------|-----------|
+| `lead` (cover)           | <img src="assets/cover.png" width="360" alt="Cover slide"> |
+| `banner`                 | <img src="assets/banner.png" width="360" alt="Banner slide"> |
+| `steps`                  | <img src="assets/steps.png" width="360" alt="Steps slide"> |
+| Default (no class)       | <img src="assets/default-content.png" width="360" alt="Default content slide"> |
+| Mermaid diagram          | <img src="assets/mermaid.png" width="360" alt="Mermaid diagram slide"> |
+| `statement`              | <img src="assets/statement.png" width="360" alt="Statement slide"> |
+
+Screenshots are auto-generated from [`decks/starter.md`](decks/starter.md) by
+`npm run build:screenshots`.
+
 ---
 
 ## Inline helper classes

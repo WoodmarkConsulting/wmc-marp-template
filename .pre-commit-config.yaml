@@ -7,3 +7,9 @@ repos:
         language: system
         files: ^decks/(starter|layout-test)\.md$
         pass_filenames: false
+      - id: build-screenshots
+        name: Build README screenshots
+        entry: npm run build:screenshots
+        language: system
+        files: ^decks/(starter|layout-test)\.md$
+        pass_filenames: false
