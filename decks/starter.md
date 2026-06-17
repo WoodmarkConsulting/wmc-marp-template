@@ -27,6 +27,14 @@ footer: '<span class="foot-date">01.01.2026</span>My Presentation · Internal ·
 
 ---
 
+<!-- _class: banner-subtitle -->
+
+## banner-subtitle — title with subtitle
+
+A subtitle sits below the main heading, inside the sloped green band.
+
+---
+
 <!-- _class: steps -->
 
 ## How to get started

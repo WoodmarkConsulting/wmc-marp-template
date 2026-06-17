@@ -97,8 +97,8 @@ placed right after the separator:
 | Class         | Description                                                                |
 | ------------- | -------------------------------------------------------------------------- |
 | *(none)*      | Plain “title + content” slide on a white background.                       |
-| `banner-subtitle` | Sloped green band + divider line — **with subtitle** (line sits lower). |
-| `banner`      | Same band, no subtitle slot — title-focused.                               |
+| `banner-subtitle` | Sloped green band + divider line + corner waves — **with subtitle** (line sits lower). |
+| `banner`      | Same band + corner waves, no subtitle slot — title-focused.                |
 | `sidebar`     | Title in a left light-green panel; content on the right.                   |
 | `steps`       | Like `sidebar`, but list items get numbered circle markers on the divider. |
 | `columns`     | Body text flows into **two balanced columns**.                             |
@@ -128,6 +128,7 @@ and content type.
 |--------|-----------|
 | `lead` (cover)           | <img src="assets/cover.png" width="360" alt="Cover slide"> |
 | `banner`                 | <img src="assets/banner.png" width="360" alt="Banner slide"> |
+| `banner-subtitle`        | <img src="assets/banner-subtitle.png" width="360" alt="Banner subtitle slide"> |
 | `steps`                  | <img src="assets/steps.png" width="360" alt="Steps slide"> |
 | Default (no class)       | <img src="assets/default-content.png" width="360" alt="Default content slide"> |
 | Mermaid diagram          | <img src="assets/mermaid.png" width="360" alt="Mermaid diagram slide"> |
