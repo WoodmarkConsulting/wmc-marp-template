@@ -5,11 +5,11 @@ repos:
         name: Build rendered decks (PDF + HTML)
         entry: npm run build:rendered
         language: system
-        files: ^decks/(starter|layout-test)\.md$
+        files: ^decks/(starter-light|starter-dark|layout-test-light|layout-test-dark)\.md$
         pass_filenames: false
       - id: build-screenshots
         name: Build README screenshots
         entry: npm run build:screenshots
         language: system
-        files: ^decks/(starter|layout-test)\.md$
+        files: ^decks/(starter-light|starter-dark|layout-test-light|layout-test-dark)\.md$
         pass_filenames: false

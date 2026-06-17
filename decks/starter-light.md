@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: woodmark
+theme: woodmark-light
 paginate: true
 header: 'My Presentation'
 footer: '<span class="foot-date">01.01.2026</span>My Presentation · Internal · © Woodmark Consulting GmbH'
@@ -31,7 +31,7 @@ footer: '<span class="foot-date">01.01.2026</span>My Presentation · Internal ·
 
 ## banner-subtitle — title with subtitle
 
-A subtitle sits below the main heading, inside the sloped green band.
+### The ### line becomes the subtitle inside the sloped band
 
 ---
 
@@ -40,7 +40,7 @@ A subtitle sits below the main heading, inside the sloped green band.
 ## How to get started
 
 - Clone the template and install dependencies
-- Copy `starter.md` and set your title & footer
+- Copy `starter-light.md` and set your title & footer
 - Write slides in Markdown with a layout per section
 - Add diagrams as ` ```mermaid ` code fences
 - Preview live with the Marp VS Code extension

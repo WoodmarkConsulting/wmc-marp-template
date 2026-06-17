@@ -18,6 +18,7 @@ script, and no “insecure content” prompts.
 - [Quick start](#quick-start)
 - [Authoring a deck](#authoring-a-deck)
 - [Slide layouts](#slide-layouts)
+- [Dark theme](#dark-theme)
 - [Inline helper classes](#inline-helper-classes)
 - [Mermaid diagrams](#mermaid-diagrams)
 - [Exporting](#exporting)
@@ -46,11 +47,11 @@ git clone <this-repo> wmc-marp-template
 cd wmc-marp-template
 npm install
 
-# Render both decks to PDF+HTML:
-npm run build:rendered             # -> decks/rendered/{starter,layout-test}.{pdf,html}
+# Render all decks to PDF+HTML:
+npm run build:rendered             # -> decks/rendered/{starter-light,starter-dark,…}.{pdf,html}
 
 # Build any deck:
-npm run build -- decks/starter.md -o decks/rendered/starter.pdf
+npm run build -- decks/starter-light.md -o decks/rendered/starter-light.pdf
 ```
 
 Generated output goes to `decks/rendered/` and is git-ignored.
@@ -59,13 +60,14 @@ Generated output goes to `decks/rendered/` and is git-ignored.
 
 ## Authoring a deck
 
-Copy [`decks/starter.md`](decks/starter.md) and edit. The front-matter wires up
-the theme:
+Copy [`decks/starter-light.md`](decks/starter-light.md) for light or
+[`decks/starter-dark.md`](decks/starter-dark.md) for dark, and edit. The
+front-matter wires up the theme:
 
 ```yaml
 ---
 marp: true
-theme: woodmark
+theme: woodmark-light   # or woodmark-dark
 paginate: true
 header: 'My Presentation'
 footer: '<span class="foot-date">01.01.2026</span>My Presentation · Internal · © Woodmark Consulting GmbH'
@@ -119,23 +121,50 @@ modifiers and can be combined:
 - Columns auto-balance. Force where the second column starts with a manual
   break: `<div class="col-break"></div>`.
 
-See [`decks/layout-test.md`](decks/layout-test.md) for a slide of every layout
+See [`decks/layout-test-light.md`](decks/layout-test-light.md) for a slide of every layout
 and content type.
+
+### Dark theme
+
+The template ships in two colour schemes built from the **same brand palette**:
+`woodmark-light` (the default) and `woodmark-dark`. Pick one in the
+front-matter; switch a whole deck to dark with:
+
+```yaml
+---
+marp: true
+theme: woodmark-dark   # <- darkens every slide, all layouts included
+paginate: true
+---
+```
+
+- `woodmark-dark` imports `woodmark-light` and only **re-maps** the brand
+  tokens: a mid-green slide field, ink panels, white text and white titles; the
+  green accents (divider lines, step circles, list markers) are unchanged.
+- It darkens **every** slide, including layout slides (`banner`, `sidebar`,
+  `steps`, …) — unlike a per-slide class, the theme can't be overridden by a
+  slide's `<!-- _class: … -->`.
+- **Mermaid diagrams follow automatically** — the build reads the
+  `theme: woodmark-dark` front-matter and renders diagrams with the matching
+  palette.
+
+See [`decks/layout-test-dark.md`](decks/layout-test-dark.md) for a dark reference deck.
 
 ### Layout examples
 
-| Layout | Screenshot |
-|--------|-----------|
-| `lead` (cover)           | <img src="assets/cover.png" width="360" alt="Cover slide"> |
-| `banner`                 | <img src="assets/banner.png" width="360" alt="Banner slide"> |
-| `banner-subtitle`        | <img src="assets/banner-subtitle.png" width="360" alt="Banner subtitle slide"> |
-| `steps`                  | <img src="assets/steps.png" width="360" alt="Steps slide"> |
-| Default (no class)       | <img src="assets/default-content.png" width="360" alt="Default content slide"> |
-| Mermaid diagram          | <img src="assets/mermaid.png" width="360" alt="Mermaid diagram slide"> |
-| `statement`              | <img src="assets/statement.png" width="360" alt="Statement slide"> |
+| Layout | Light | Dark |
+|--------|-------|------|
+| `lead` (cover)           | <img src="assets/screenshots/light/cover.png" width="360" alt="Cover slide (light)">          | <img src="assets/screenshots/dark/cover.png" width="360" alt="Cover slide (dark)"> |
+| `banner`                 | <img src="assets/screenshots/light/banner.png" width="360" alt="Banner slide (light)">        | <img src="assets/screenshots/dark/banner.png" width="360" alt="Banner slide (dark)"> |
+| `banner-subtitle`        | <img src="assets/screenshots/light/banner-subtitle.png" width="360" alt="Banner subtitle (light)"> | <img src="assets/screenshots/dark/banner-subtitle.png" width="360" alt="Banner subtitle (dark)"> |
+| `steps`                  | <img src="assets/screenshots/light/steps.png" width="360" alt="Steps slide (light)">          | <img src="assets/screenshots/dark/steps.png" width="360" alt="Steps slide (dark)"> |
+| Default (no class)       | <img src="assets/screenshots/light/default-content.png" width="360" alt="Default slide (light)"> | <img src="assets/screenshots/dark/default-content.png" width="360" alt="Default slide (dark)"> |
+| Mermaid diagram          | <img src="assets/screenshots/light/mermaid.png" width="360" alt="Mermaid slide (light)">      | <img src="assets/screenshots/dark/mermaid.png" width="360" alt="Mermaid slide (dark)"> |
+| `statement`              | <img src="assets/screenshots/light/statement.png" width="360" alt="Statement slide (light)">  | <img src="assets/screenshots/dark/statement.png" width="360" alt="Statement slide (dark)"> |
 
-Screenshots are auto-generated from [`decks/starter.md`](decks/starter.md) by
-`npm run build:screenshots`.
+Screenshots are auto-generated from
+[`decks/starter-light.md`](decks/starter-light.md) and
+[`decks/starter-dark.md`](decks/starter-dark.md) by `npm run build:screenshots`.
 
 ---
 
@@ -179,8 +208,9 @@ Options can follow `mermaid` on the fence line:
 | `align=`   | `align=left`     | Horizontal alignment (`left` / `center` / `right`). |
 
 Diagrams inherit the Woodmark palette (tinted node fills, green borders and
-edges, racing-green text). Adjust the palette in
-[`lib/mermaid/render.mjs`](lib/mermaid/render.mjs) (`MERMAID_CONFIG`).
+edges, racing-green text); the dark theme uses a matching variant. Adjust the
+palettes in [`lib/mermaid/render.mjs`](lib/mermaid/render.mjs)
+(`MERMAID_CONFIG_LIGHT` / `MERMAID_CONFIG_DARK`).
 
 > **Preview caveat:** the custom rendering engine only runs during CLI export.
 > In the VS Code Marp preview, ` ```mermaid ` blocks show as plain code. The
@@ -195,16 +225,16 @@ the Mermaid engine:
 
 ```bash
 # PDF (default)
-npx marp --config marp.config.mjs decks/starter.md -o decks/rendered/starter.pdf
+npx marp --config marp.config.mjs decks/starter-light.md -o decks/rendered/starter-light.pdf
 
 # PowerPoint
-npx marp --config marp.config.mjs decks/starter.md -o decks/rendered/starter.pptx
+npx marp --config marp.config.mjs decks/starter-light.md -o decks/rendered/starter-light.pptx
 
 # PNG images (one per slide)
-npx marp --config marp.config.mjs decks/starter.md --images png -o decks/rendered/starter.png
+npx marp --config marp.config.mjs decks/starter-light.md --images png -o decks/rendered/starter-light.png
 
 # Self-contained HTML
-npx marp --config marp.config.mjs decks/starter.md -o decks/rendered/starter.html
+npx marp --config marp.config.mjs decks/starter-light.md -o decks/rendered/starter-light.html
 ```
 
 Or use the npm scripts:
@@ -212,7 +242,7 @@ Or use the npm scripts:
 | Script                    | Output                          |
 | ------------------------- | ------------------------------- |
 | `npm run build -- <deck>` | Generic build (pass marp flags) |
-| `npm run build:rendered`  | PDF+HTML for both starter and layout-test |
+| `npm run build:rendered`  | PDF+HTML for all starter and layout-test decks |
 | `npm run build:pdf`       | PDF output (pass output after `--`) |
 | `npm run server`          | Start Marp preview server at `http://localhost:8080/` |
 | `npm run watch`           | Rebuild `decks/` on change      |
@@ -251,11 +281,11 @@ This starts a local Marp development server watching the `decks/` folder and ser
 
 ## VS Code live preview
 
-The theme is registered for the Marp extension in
+The themes are registered for the Marp extension in
 [`.vscode/settings.json`](.vscode/settings.json):
 
 ```jsonc
-{ "markdown.marp.themes": ["./themes/woodmark.css"] }
+{ "markdown.marp.themes": ["./themes/woodmark-light.css", "./themes/woodmark-dark.css"] }
 ```
 
 Install **Marp for VS Code**, open a deck (one with `marp: true`), and the
@@ -277,6 +307,15 @@ Mermaid blocks differ (plain code in preview, SVG on export).
 | Headings font    | Roboto Slab     | loaded from Google Fonts         |
 | Body font        | Source Sans     | loaded from Google Fonts         |
 
+In **dark mode** (`theme: woodmark-dark`) the same tokens are re-mapped by role
+rather than replaced: the slide field becomes mid-green `#2D5C47`, panels/bands
+become ink `#204232`, text and titles become white, and the green/teal/orange/red
+accents are unchanged. The theme styles everything through semantic role
+variables (`--page-bg`, `--text`, `--heading`, `--panel`, …) so the two schemes
+stay in sync; the dark file only overrides those tokens and the
+colour-baked layout backgrounds. See
+[`themes/woodmark-dark.css`](themes/woodmark-dark.css).
+
 All decoration (marker, bands, slanted lines) is drawn with inline SVG / CSS —
 the theme has **no external image dependencies** and is fully self-contained.
 
@@ -295,13 +334,16 @@ wmc-marp-template/
 ├── LICENSE
 ├── README.md
 ├── themes/
-│   └── woodmark.css         # The Woodmark Marp/Marpit theme
+│   ├── woodmark-light.css   # The Woodmark Marp/Marpit theme (light, default)
+│   └── woodmark-dark.css    # Dark variant — imports & re-maps woodmark-light
 ├── lib/mermaid/
 │   ├── plugin.mjs           # markdown-it plugin: ```mermaid -> placeholder
 │   └── render.mjs           # build-time placeholder -> themed SVG
 ├── decks/
-│   ├── starter.md           # Minimal starting point — copy this
-│   ├── layout-test.md       # Reference: every layout and content type
+│   ├── starter-light.md     # Minimal starting point (light) — copy this
+│   ├── starter-dark.md      # Minimal starting point (dark) — copy this
+│   ├── layout-test-light.md # Reference: every layout and content type (light)
+│   ├── layout-test-dark.md  # Reference: the dark colour scheme
 │   └── rendered/            # Generated output (git-ignored)
 └── .vscode/
     └── settings.json        # Registers the theme for live preview
@@ -318,7 +360,7 @@ To reuse a different browser instead, set `CHROME_PATH` yourself — it takes
 precedence:
 
 ```bash
-CHROME_PATH=/path/to/chrome npm run build:layout-test
+CHROME_PATH=/path/to/chrome npm run build:rendered
 ```
 
 The same variable is read in [`.vscode/settings.json`](.vscode/settings.json)

@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: woodmark
+theme: woodmark-light
 header: 'Woodmark Marp Template — Reference'
 footer: '<span class="foot-date">16.06.2026</span>Layout &amp; Style Reference · Internal · © Woodmark Consulting GmbH'
 paginate: true
@@ -27,7 +27,7 @@ A living showcase — every slide explains the feature it demonstrates
 - Combine modifiers freely, e.g. `columns banner`.
 - Copy any slide as a starting point — the markdown is the spec.
 
-> Front-matter sets `theme: woodmark`, `paginate: true`, plus a `header` and
+> Front-matter sets `theme: woodmark-light`, `paginate: true`, plus a `header` and
 > `footer`. The *“Passion for data”* corner marker is added automatically.
 
 ---

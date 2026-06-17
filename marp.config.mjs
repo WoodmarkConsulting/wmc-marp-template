@@ -4,9 +4,9 @@
  * Provides a custom engine that renders ```mermaid fenced blocks to inline,
  * themed SVG at build time. Run from the repository root, e.g.:
  *
- *   npm run build -- decks/layout-test.md -o dist/layout-test.pdf
+ *   npm run build -- decks/layout-test-light.md -o dist/layout-test-light.pdf
  *   # or directly:
- *   npx marp --config marp.config.mjs decks/layout-test.md -o out.pdf
+ *   npx marp --config marp.config.mjs decks/layout-test-light.md -o out.pdf
  *
  * Note: this custom engine only runs during CLI export. The VS Code Marp
  * preview cannot load custom engines, so ```mermaid blocks appear as plain
@@ -41,14 +41,31 @@ class MermaidMarp extends Marp {
   // marp-cli awaits engine.render(), so an async override is supported.
   async render(markdown) {
     const result = super.render(markdown);
-    result.html = await renderMermaidPlaceholders(result.html);
+    result.html = await renderMermaidPlaceholders(result.html, {
+      dark: deckIsDark(markdown),
+    });
     return result;
   }
 }
 
+/**
+ * Detect whether a deck opts into the dark theme so Mermaid diagrams match the
+ * slides. Mirrors the CSS switch: the deck selects `theme: woodmark-dark` in its
+ * front-matter (the supported whole-deck switch). A `dark` class directive
+ * (global `class:` or per-slide `_class:`) is also honoured for completeness.
+ */
+function deckIsDark(markdown) {
+  if (/^\s*theme:\s*woodmark-dark\s*$/m.test(markdown)) return true;
+  const directive = /_?class:\s*([A-Za-z0-9_\- ]+)/g;
+  for (const [, value] of markdown.matchAll(directive)) {
+    if (/(^|\s)dark(\s|$)/.test(value.trim())) return true;
+  }
+  return false;
+}
+
 export default {
   engine: MermaidMarp,
-  themeSet: ['./themes/woodmark.css'],
+  themeSet: ['./themes/woodmark-light.css', './themes/woodmark-dark.css'],
   html: true,
   allowLocalFiles: true,
 };

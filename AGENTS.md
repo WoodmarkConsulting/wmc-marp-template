@@ -18,13 +18,19 @@ pieces together:
   `<div>`s (the source is base64-encoded, fence options preserved).
 - [lib/mermaid/render.mjs](lib/mermaid/render.mjs) — an async post-processor
   (`render()` override) that replaces those placeholders with inline,
-  Woodmark-themed SVG via a headless Chromium. Diagram palette = `MERMAID_CONFIG`.
+  Woodmark-themed SVG via a headless Chromium. Diagram palette =
+  `MERMAID_CONFIG_LIGHT` / `MERMAID_CONFIG_DARK`; the engine picks dark when the
+  deck sets `theme: woodmark-dark`.
 
 The placeholder split exists because markdown-it is synchronous but Mermaid
 rendering needs an async browser step.
 
-The visual brand is entirely in [themes/woodmark.css](themes/woodmark.css)
+The visual brand is in [themes/woodmark-light.css](themes/woodmark-light.css)
 (extends Marpit's `default`). Slide layouts are CSS classes applied per slide.
+[themes/woodmark-dark.css](themes/woodmark-dark.css) is a thin variant that
+`@import`s the light theme and only re-maps the semantic role tokens (and the
+colour-baked layout backgrounds). Style through the role tokens (`--page-bg`,
+`--text`, `--heading`, `--panel`, …) so both themes stay in sync.
 
 ## Build & export commands
 
@@ -35,7 +41,7 @@ All exports MUST go through the config so the theme and Mermaid engine load:
 | --- | --- |
 | `npm install` | Install tooling; downloads Chromium via Puppeteer |
 | `npm run build -- decks/<deck>.md -o decks/rendered/<out>.pdf` | Export one deck (pass marp flags after `--`) |
-| `npm run build:rendered` | PDF+HTML for both starter and layout-test to `decks/rendered/` |
+| `npm run build:rendered` | PDF+HTML for all starter and layout-test decks to `decks/rendered/` |
 | `npm run server` | Start the local preview server at `http://localhost:8080/` |
 | `npm run watch` | Rebuild `decks/` on change |
 
@@ -44,15 +50,17 @@ Output goes to `decks/rendered/` (git-ignored) — never commit generated files.
 ## Conventions
 
 - **ESM only**: package is `"type": "module"`; use `import`, `.mjs`.
-- **Authoring a deck**: copy [decks/starter.md](decks/starter.md). Set a layout
+- **Authoring a deck**: copy [decks/starter-light.md](decks/starter-light.md) or [decks/starter-dark.md](decks/starter-dark.md). Set a layout
   with a slide-local directive after the `---` separator, e.g.
   `<!-- _class: banner -->`. The full layout/helper-class catalog is in
   [README.md](README.md) and demonstrated in
-  [decks/layout-test.md](decks/layout-test.md) — keep that deck in sync when
-  adding or changing a layout.
+  [decks/layout-test-light.md](decks/layout-test-light.md) (and its dark twin
+  [decks/layout-test-dark.md](decks/layout-test-dark.md)) — keep those decks in
+  sync when adding or changing a layout.
 - **Brand colors**: reference the `--wm-*` CSS variables in
-  [themes/woodmark.css](themes/woodmark.css). The same hex values are mirrored
-  in `MERMAID_CONFIG` ([lib/mermaid/render.mjs](lib/mermaid/render.mjs)) — change
+  [themes/woodmark-light.css](themes/woodmark-light.css). The same hex values
+  are mirrored in `MERMAID_CONFIG_LIGHT` / `MERMAID_CONFIG_DARK`
+  ([lib/mermaid/render.mjs](lib/mermaid/render.mjs)) — change
   both together so diagrams and slides stay consistent.
 - **Mermaid in preview**: the custom engine runs only during CLI export. In the
   VS Code Marp preview, ` ```mermaid ` blocks show as plain code. The exported

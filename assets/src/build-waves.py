@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Regenerate the banner separator + wave decoration embedded in themes/woodmark.css.
+"""Regenerate the banner separator + wave decoration embedded in the themes.
+
+The light backgrounds are written into themes/woodmark-light.css and the dark
+backgrounds into themes/woodmark-dark.css (between the @waves-dark markers).
 
 The sloped header band of the `banner` / `banner-subtitle` layouts has two parts:
 
@@ -36,7 +39,8 @@ from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
-CSS = os.path.join(ROOT, "themes", "woodmark.css")
+CSS = os.path.join(ROOT, "themes", "woodmark-light.css")
+CSS_DARK = os.path.join(ROOT, "themes", "woodmark-dark.css")
 
 SLIDE_W = 1280
 SCALE_W = 1300  # downscale width for the embedded wave PNG (keeps lines crisp)
@@ -63,6 +67,20 @@ GEO = {
 # anchor on padding-top to disambiguate the two rules in the CSS
 PAD = {"banner": "218px", "banner-subtitle": "284px"}
 
+# Band fill per theme: the sloped band behind the title. The separator line
+# stays Woodmark green (#009b3e) in both themes.
+BAND_LIGHT = "#e7f3e8"  # --wm-tint
+BAND_DARK = "#204232"   # --wm-ink
+
+# Wave-line recolour per theme. Light keeps the source art (dark-green lines on
+# the light tint band); dark recolours the lines to Woodmark green so they read
+# on the dark ink band.
+WAVE_DARK = (0, 155, 62)  # #009b3e — Woodmark grün
+
+# Markers around the script-managed block of dark banner backgrounds.
+DARK_START = "/* @waves-dark:start */"
+DARK_END = "/* @waves-dark:end */"
+
 
 def encode_svg(raw):
     """Minimal URL-encoding for an inline SVG data URI (matches theme style)."""
@@ -70,8 +88,8 @@ def encode_svg(raw):
                .replace(" ", "%20").replace(",", "%2C"))
 
 
-def band_svg(g):
-    """Light tint band + sloped green separator line, both at SLOPE."""
+def band_svg(g, fill=BAND_LIGHT):
+    """Sloped band (at `fill`) + sloped green separator line, both at SLOPE."""
     gl = g["green_left"]
     gr = gl + SLOPE * SLIDE_W            # green top-edge y at right edge
     bl = gl - g["gap"]                   # tint-band bottom y at left edge
@@ -84,7 +102,7 @@ def band_svg(g):
     raw = (
         "<svg xmlns='http://www.w3.org/2000/svg' "
         "viewBox='0 0 1280 720' preserveAspectRatio='none'>"
-        f"<polygon points='{band}' fill='#e7f3e8'/>"
+        f"<polygon points='{band}' fill='{fill}'/>"
         f"<polygon points='{line}' fill='#009b3e'/>"
         "</svg>"
     )
@@ -96,6 +114,14 @@ def wave_image(png):
     im = Image.open(os.path.join(HERE, png)).convert("RGBA")
     im = im.crop(im.split()[3].getbbox())  # trim transparent margins
     return im
+
+
+def recolor(im, rgb):
+    """Replace every opaque pixel's RGB with `rgb`, preserving the alpha mask."""
+    r, g, b, a = im.split()
+    solid = Image.new("RGBA", im.size, (rgb[0], rgb[1], rgb[2], 0))
+    solid.putalpha(a)
+    return solid
 
 
 def data_uri(im):
@@ -140,6 +166,7 @@ def seat_offset(im, g):
 
 
 def build_bg(name):
+    """Light background declaration for `section.<name>`."""
     g = GEO[name]
     im = wave_image(g["png"])
     top = seat_offset(im, g)
@@ -149,22 +176,54 @@ def build_bg(name):
     return (
         "background:\n"
         f'        {wave} {pos} / {g["width"]}px auto no-repeat,\n'
-        f"        {band_svg(g)} 0 0 / 100% 100% no-repeat var(--wm-white);"
+        f"        {band_svg(g)} 0 0 / 100% 100% no-repeat var(--page-bg);"
+    )
+
+
+def build_dark_rule(name):
+    """Dark `section.<name>` rule (for woodmark-dark.css): ink band + recoloured
+    (lighter) waves."""
+    g = GEO[name]
+    im = wave_image(g["png"])
+    top = seat_offset(im, g)
+    wave = data_uri(recolor(im, WAVE_DARK))
+    pos = f"right 0px top {top}px"
+    return (
+        f"section.{name} {{\n"
+        "    background:\n"
+        f'        {wave} {pos} / {g["width"]}px auto no-repeat,\n'
+        f"        {band_svg(g, BAND_DARK)} 0 0 / 100% 100% no-repeat var(--page-bg);\n"
+        "}"
     )
 
 
 def main():
+    # 1. Light rules live in woodmark-light.css: rewrite each banner section's
+    #    `background:` in place.
     css = open(CSS).read()
     for name in ("banner", "banner-subtitle"):
         pat = re.compile(
             r"(padding-top:\s*" + re.escape(PAD[name])
-            + r";\s*\n\s*)background:[\s\S]*?no-repeat var\(--wm-white\);"
+            + r";\s*\n\s*)background:[\s\S]*?no-repeat var\(--(?:wm-white|page-bg)\);"
         )
         css, n = pat.subn(lambda m: m.group(1) + build_bg(name), css, count=1)
         if n != 1:
             sys.exit(f"ERROR: rule 'section.{name}' not matched ({n})")
-        print(f"injected section.{name}")
+        print(f"injected section.{name} (light)")
     open(CSS, "w").write(css)
+
+    # 2. Dark rules live in woodmark-dark.css between the managed markers.
+    dark = open(CSS_DARK).read()
+    dark_block = "\n\n".join(
+        build_dark_rule(name) for name in ("banner", "banner-subtitle")
+    )
+    replacement = f"{DARK_START}\n{dark_block}\n{DARK_END}"
+    pat = re.compile(re.escape(DARK_START) + r"[\s\S]*?" + re.escape(DARK_END))
+    dark, n = pat.subn(lambda m: replacement, dark, count=1)
+    if n != 1:
+        sys.exit(f"ERROR: dark marker block not found in woodmark-dark.css ({n})")
+    open(CSS_DARK, "w").write(dark)
+    print("injected dark banner / banner-subtitle block (woodmark-dark.css)")
 
 
 if __name__ == "__main__":
